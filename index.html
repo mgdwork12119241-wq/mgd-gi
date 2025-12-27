@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="htmlTag">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +17,7 @@
             color: #e0e0e0;
             min-height: 100vh;
             padding: 20px;
+            transition: direction 0.3s ease;
         }
 
         .container {
@@ -27,7 +28,38 @@
         header {
             text-align: center;
             margin-bottom: 40px;
-            animation: fadeIn 0.8s ease-in;
+            position: relative;
+        }
+
+        .lang-switcher {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        [dir="ltr"] .lang-switcher {
+            left: auto;
+            right: 0;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(124, 58, 237, 0.5);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+            min-width: auto;
+            box-shadow: none;
+        }
+
+        .lang-btn.active {
+            background: #7c3aed;
+            border-color: #7c3aed;
         }
 
         h1 {
@@ -69,12 +101,6 @@
             border-radius: 12px;
             padding: 30px;
             backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .panel:hover {
-            border-color: rgba(124, 58, 237, 0.6);
-            background: rgba(255, 255, 255, 0.08);
         }
 
         .panel h2 {
@@ -131,16 +157,8 @@
             box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
         }
 
-        button:active {
-            transform: translateY(0);
-        }
-
         .reset-btn {
             background: linear-gradient(135deg, #ef4444, #f97316);
-        }
-
-        .reset-btn:hover {
-            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
         }
 
         .info-panel {
@@ -149,6 +167,11 @@
             padding: 15px;
             border-radius: 6px;
             margin-bottom: 15px;
+        }
+
+        [dir="rtl"] .info-panel {
+            border-left: none;
+            border-right: 4px solid #00d4ff;
         }
 
         .info-label {
@@ -176,7 +199,6 @@
             border-radius: 50%;
             background: rgba(124, 58, 237, 0.3);
             border: 1px solid rgba(124, 58, 237, 0.5);
-            transition: all 0.3s ease;
         }
 
         .dimension-dot.active {
@@ -205,40 +227,6 @@
             line-height: 1.6;
         }
 
-        .observation-item:last-child {
-            border-bottom: none;
-        }
-
-        @media (max-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-
-            h1 {
-                font-size: 2em;
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .footer {
-            text-align: center;
-            color: #606060;
-            font-size: 0.9em;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(124, 58, 237, 0.2);
-        }
-
         .status-message {
             padding: 12px;
             border-radius: 6px;
@@ -248,46 +236,53 @@
             border-left: 4px solid #22c55e;
             color: #86efac;
         }
+
+        [dir="rtl"] .status-message {
+            border-left: none;
+            border-right: 4px solid #22c55e;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content { grid-template-columns: 1fr; }
+            .lang-switcher { position: static; justify-content: center; margin-bottom: 20px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🌌 Generative Spatial Intelligence</h1>
-            <p class="subtitle">Interactive Research Dashboard for Dimensional Evolution</p>
-            <div class="research-badge">🔬 Active Exploratory Research Project</div>
+            <div class="lang-switcher">
+                <button class="lang-btn active" onclick="setLanguage('ar')">العربية</button>
+                <button class="lang-btn" onclick="setLanguage('en')">English</button>
+            </div>
+            <h1 id="title">🌌 الذكاء المكاني التوليدي</h1>
+            <p class="subtitle" id="subtitle">لوحة أبحاث تفاعلية لتطور الأبعاد</p>
+            <div class="research-badge" id="badge">🔬 مشروع بحثي استكشافي نشط</div>
         </header>
 
         <div class="main-content">
-            <!-- Canvas Panel -->
             <div class="panel">
-                <h2>Spatial Visualization</h2>
+                <h2 id="vizTitle">التصور المكاني</h2>
                 <canvas id="canvas"></canvas>
                 <div class="controls">
-                    <button onclick="evolveEntity()">➕ Add Dimension</button>
-                    <button onclick="resetEntity()" class="reset-btn">🔄 Reset</button>
+                    <button onclick="evolveEntity()" id="evolveBtn">➕ إضافة بُعد</button>
+                    <button onclick="resetEntity()" class="reset-btn" id="resetBtn">🔄 إعادة ضبط</button>
                 </div>
-                <div class="status-message" id="statusMessage">
-                    Ready to evolve. Click "Add Dimension" to begin.
-                </div>
+                <div class="status-message" id="statusMessage">جاهز للتطور. اضغط على "إضافة بُعد" للبدء.</div>
             </div>
 
-            <!-- Information Panel -->
             <div class="panel">
-                <h2>Entity State</h2>
-                
+                <h2 id="stateTitle">حالة الكيان</h2>
                 <div class="info-panel">
-                    <div class="info-label">Current Dimensions</div>
+                    <div class="info-label" id="dimLabel">الأبعاد الحالية</div>
                     <div class="info-value" id="dimensionCount">0D</div>
                 </div>
-
                 <div class="info-panel">
-                    <div class="info-label">Representation</div>
-                    <div class="info-value" id="representation">Conceptual Point</div>
+                    <div class="info-label" id="repLabel">التمثيل</div>
+                    <div class="info-value" id="representation">نقطة مفاهيمية</div>
                 </div>
-
                 <div class="info-panel">
-                    <div class="info-label">Evolution State</div>
+                    <div class="info-label" id="evolveLabel">حالة التطور</div>
                     <div class="dimension-indicator" id="dimensionIndicator">
                         <div class="dimension-dot active"></div>
                         <div class="dimension-dot"></div>
@@ -295,178 +290,183 @@
                         <div class="dimension-dot"></div>
                     </div>
                 </div>
-
                 <div class="observations">
-                    <h3>📊 Research Observations</h3>
-                    <div class="observation-item">
-                        Early dimensional transitions are predictable and stable.
-                    </div>
-                    <div class="observation-item">
-                        Simple evolution logic produces emergent spatial structures.
-                    </div>
-                    <div class="observation-item">
-                        Mapping abstract intent to spatial rules remains non-trivial.
+                    <h3 id="obsTitle">📊 ملاحظات بحثية</h3>
+                    <div id="obsList">
+                        <div class="observation-item">انتقالات الأبعاد المبكرة مستقرة ويمكن التنبؤ بها.</div>
+                        <div class="observation-item">منطق التطور البسيط ينتج هياكل مكانية ناشئة.</div>
+                        <div class="observation-item">ربط القصد المجرد بالقواعد المكانية يظل تحدياً بحثياً.</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <footer class="footer">
-            <p>mgd-gi: Model-Guided Dimensional Generator - General Intelligence</p>
-            <p>Independent research exploring generative intelligence and spatial reasoning paradigms.</p>
+        <footer class="footer" style="text-align: center; color: #606060; font-size: 0.9em; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(124, 58, 237, 0.2);">
+            <p id="footer1">mgd-gi: مولد الأبعاد الموجه بالنماذج - ذكاء عام</p>
+            <p id="footer2">بحث مستقل يستكشف نماذج الذكاء التوليدي والاستدلال المكاني.</p>
         </footer>
     </div>
 
     <script type="module">
         import { SpatialEntity } from './SpatialEntity.js';
 
-        // Initialize the spatial entity
         const entity = new SpatialEntity();
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
+        let currentLang = 'ar';
 
-        // Set canvas size
+        const translations = {
+            ar: {
+                title: "🌌 الذكاء المكاني التوليدي",
+                subtitle: "لوحة أبحاث تفاعلية لتطور الأبعاد",
+                badge: "🔬 مشروع بحثي استكشافي نشط",
+                vizTitle: "التصور المكاني",
+                evolveBtn: "➕ إضافة بُعد",
+                resetBtn: "🔄 إعادة ضبط",
+                statusReady: "جاهز للتطور. اضغط على \"إضافة بُعد\" للبدء.",
+                statusEvolved: "تطور الكيان إلى ",
+                statusMax: "تم الوصول لأقصى أبعاد (5D)",
+                statusReset: "تمت إعادة الكيان للحالة الأولية",
+                stateTitle: "حالة الكيان",
+                dimLabel: "الأبعاد الحالية",
+                repLabel: "التمثيل",
+                evolveLabel: "حالة التطور",
+                obsTitle: "📊 ملاحظات بحثية",
+                obs1: "انتقالات الأبعاد المبكرة مستقرة ويمكن التنبؤ بها.",
+                obs2: "منطق التطور البسيط ينتج هياكل مكانية ناشئة.",
+                obs3: "ربط القصد المجرد بالقواعد المكانية يظل تحدياً بحثياً.",
+                footer1: "mgd-gi: مولد الأبعاد الموجه بالنماذج - ذكاء عام",
+                footer2: "بحث مستقل يستكشف نماذج الذكاء التوليدي والاستدلال المكاني.",
+                rep0: "نقطة مفاهيمية (0D)",
+                rep1: "خط / علاقة (1D)",
+                rep2: "سطح / تفاعل (2D)",
+                rep3: "حجم / بيئة (3D)",
+                rep4: "كيان فائق (4D)"
+            },
+            en: {
+                title: "🌌 Generative Spatial Intelligence",
+                subtitle: "Interactive Research Dashboard for Dimensional Evolution",
+                badge: "🔬 Active Exploratory Research Project",
+                vizTitle: "Spatial Visualization",
+                evolveBtn: "➕ Add Dimension",
+                resetBtn: "🔄 Reset",
+                statusReady: "Ready to evolve. Click \"Add Dimension\" to begin.",
+                statusEvolved: "Entity evolved to ",
+                statusMax: "Maximum dimensions reached (5D)",
+                statusReset: "Entity reset to initial state",
+                stateTitle: "Entity State",
+                dimLabel: "Current Dimensions",
+                repLabel: "Representation",
+                evolveLabel: "Evolution State",
+                obsTitle: "📊 Research Observations",
+                obs1: "Early dimensional transitions are predictable and stable.",
+                obs2: "Simple evolution logic produces emergent spatial structures.",
+                obs3: "Mapping abstract intent to spatial rules remains non-trivial.",
+                footer1: "mgd-gi: Model-Guided Dimensional Generator - General Intelligence",
+                footer2: "Independent research exploring generative intelligence and spatial reasoning paradigms.",
+                rep0: "Conceptual Point (0D)",
+                rep1: "Line / Relation (1D)",
+                rep2: "Surface / Interaction (2D)",
+                rep3: "Volume / Environment (3D)",
+                rep4: "Hyperspace Entity (4D)"
+            }
+        };
+
+        window.setLanguage = function(lang) {
+            currentLang = lang;
+            const html = document.getElementById('htmlTag');
+            html.lang = lang;
+            html.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+            // Update UI text
+            document.getElementById('title').textContent = translations[lang].title;
+            document.getElementById('subtitle').textContent = translations[lang].subtitle;
+            document.getElementById('badge').textContent = translations[lang].badge;
+            document.getElementById('vizTitle').textContent = translations[lang].vizTitle;
+            document.getElementById('evolveBtn').textContent = translations[lang].evolveBtn;
+            document.getElementById('resetBtn').textContent = translations[lang].resetBtn;
+            document.getElementById('stateTitle').textContent = translations[lang].stateTitle;
+            document.getElementById('dimLabel').textContent = translations[lang].dimLabel;
+            document.getElementById('repLabel').textContent = translations[lang].repLabel;
+            document.getElementById('evolveLabel').textContent = translations[lang].evolveLabel;
+            document.getElementById('obsTitle').textContent = translations[lang].obsTitle;
+            document.getElementById('footer1').textContent = translations[lang].footer1;
+            document.getElementById('footer2').textContent = translations[lang].footer2;
+
+            const obsItems = document.querySelectorAll('.observation-item');
+            obsItems[0].textContent = translations[lang].obs1;
+            obsItems[1].textContent = translations[lang].obs2;
+            obsItems[2].textContent = translations[lang].obs3;
+
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase().includes(lang === 'ar' ? 'عربي' : 'eng'));
+            });
+
+            updateUI();
+            drawEntity();
+        };
+
         function resizeCanvas() {
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
+            drawEntity();
         }
-        resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        // Visualization function
         function drawEntity() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
-
             ctx.save();
 
             switch (entity.dimensions) {
                 case 0:
-                    // 0D - Point
                     ctx.fillStyle = '#00d4ff';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.fillStyle = '#00d4ff';
-                    ctx.font = 'bold 14px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('0D: Conceptual Point', centerX, centerY + 40);
+                    ctx.beginPath(); ctx.arc(centerX, centerY, 8, 0, Math.PI * 2); ctx.fill();
                     break;
-
                 case 1:
-                    // 1D - Line
-                    ctx.strokeStyle = '#7c3aed';
-                    ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.moveTo(centerX - 80, centerY);
-                    ctx.lineTo(centerX + 80, centerY);
-                    ctx.stroke();
-                    
-                    // Draw arrows
-                    ctx.fillStyle = '#7c3aed';
-                    ctx.beginPath();
-                    ctx.moveTo(centerX + 80, centerY);
-                    ctx.lineTo(centerX + 70, centerY - 8);
-                    ctx.lineTo(centerX + 70, centerY + 8);
-                    ctx.fill();
-
-                    ctx.fillStyle = '#7c3aed';
-                    ctx.font = 'bold 14px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('1D: Direction / Relation', centerX, centerY + 40);
+                    ctx.strokeStyle = '#7c3aed'; ctx.lineWidth = 3;
+                    ctx.beginPath(); ctx.moveTo(centerX - 80, centerY); ctx.lineTo(centerX + 80, centerY); ctx.stroke();
                     break;
-
                 case 2:
-                    // 2D - Rectangle/Plane
-                    ctx.fillStyle = 'rgba(0, 212, 255, 0.3)';
-                    ctx.strokeStyle = '#00d4ff';
-                    ctx.lineWidth = 2;
-                    ctx.fillRect(centerX - 100, centerY - 80, 200, 160);
-                    ctx.strokeRect(centerX - 100, centerY - 80, 200, 160);
-
-                    ctx.fillStyle = '#00d4ff';
-                    ctx.font = 'bold 14px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('2D: Surface / Interaction', centerX, centerY + 100);
+                    ctx.fillStyle = 'rgba(0, 212, 255, 0.3)'; ctx.strokeStyle = '#00d4ff'; ctx.lineWidth = 2;
+                    ctx.fillRect(centerX - 100, centerY - 80, 200, 160); ctx.strokeRect(centerX - 100, centerY - 80, 200, 160);
                     break;
-
                 case 3:
-                    // 3D - Cube (isometric projection)
                     drawIsometricCube(centerX, centerY, 80);
-                    ctx.fillStyle = '#7c3aed';
-                    ctx.font = 'bold 14px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('3D: Volume / Environment', centerX, centerY + 120);
                     break;
-
                 default:
-                    // Higher dimensions - Abstract representation
-                    ctx.fillStyle = 'rgba(124, 58, 237, 0.2)';
-                    ctx.strokeStyle = '#7c3aed';
-                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#7c3aed'; ctx.lineWidth = 2;
                     for (let i = 0; i < 5; i++) {
-                        const radius = 50 + i * 20;
-                        ctx.beginPath();
-                        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-                        ctx.stroke();
+                        ctx.beginPath(); ctx.arc(centerX, centerY, 50 + i * 20, 0, Math.PI * 2); ctx.stroke();
                     }
-
-                    ctx.fillStyle = '#7c3aed';
-                    ctx.font = 'bold 14px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(`${entity.dimensions}D: Hyperspace Entity`, centerX, centerY + 130);
             }
-
             ctx.restore();
         }
 
         function drawIsometricCube(x, y, size) {
-            const iso = {
-                x: x,
-                y: y - size / 2,
-            };
-
-            // Define cube points in isometric projection
-            const points = [
-                [iso.x - size, iso.y, '#00d4ff'],
-                [iso.x + size, iso.y, '#00d4ff'],
-                [iso.x + size * 2, iso.y + size, '#7c3aed'],
-                [iso.x, iso.y + size * 2, '#7c3aed'],
-                [iso.x - size, iso.y + size, '#00d4ff'],
-                [iso.x, iso.y, '#00d4ff'],
-            ];
-
-            // Draw edges
-            ctx.strokeStyle = '#7c3aed';
-            ctx.lineWidth = 2;
+            const isoY = y - size / 2;
+            ctx.strokeStyle = '#7c3aed'; ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(points[0][0], points[0][1]);
-            for (let i = 1; i < points.length; i++) {
-                ctx.lineTo(points[i][0], points[i][1]);
-            }
-            ctx.closePath();
-            ctx.stroke();
-
-            // Fill with gradient
-            const gradient = ctx.createLinearGradient(iso.x - size, iso.y, iso.x + size * 2, iso.y + size * 2);
-            gradient.addColorStop(0, 'rgba(124, 58, 237, 0.4)');
-            gradient.addColorStop(1, 'rgba(0, 212, 255, 0.4)');
-            ctx.fillStyle = gradient;
-            ctx.fill();
+            ctx.moveTo(x - size, isoY); ctx.lineTo(x + size, isoY);
+            ctx.lineTo(x + size * 2, isoY + size); ctx.lineTo(x, isoY + size * 2);
+            ctx.lineTo(x - size, isoY + size); ctx.closePath(); ctx.stroke();
+            const grad = ctx.createLinearGradient(x - size, isoY, x + size * 2, isoY + size * 2);
+            grad.addColorStop(0, 'rgba(124, 58, 237, 0.4)'); grad.addColorStop(1, 'rgba(0, 212, 255, 0.4)');
+            ctx.fillStyle = grad; ctx.fill();
         }
 
-        // Global functions for buttons
         window.evolveEntity = function() {
             if (entity.dimensions < 5) {
                 entity.evolve();
                 updateUI();
                 drawEntity();
-                updateStatus(`Entity evolved to ${entity.dimensions}D`);
+                updateStatus(translations[currentLang].statusEvolved + entity.dimensions + "D");
             } else {
-                updateStatus('Maximum dimensions reached (5D)');
+                updateStatus(translations[currentLang].statusMax);
             }
         };
 
@@ -474,37 +474,22 @@
             entity.dimensions = 0;
             updateUI();
             drawEntity();
-            updateStatus('Entity reset to initial state');
+            updateStatus(translations[currentLang].statusReset);
         };
 
         function updateUI() {
-            const dimensionCount = entity.dimensions;
-            document.getElementById('dimensionCount').textContent = `${dimensionCount}D`;
-            document.getElementById('representation').textContent = entity.getRepresentation();
-
-            // Update dimension indicators
+            document.getElementById('dimensionCount').textContent = `${entity.dimensions}D`;
+            const repKey = `rep${Math.min(entity.dimensions, 4)}`;
+            document.getElementById('representation').textContent = translations[currentLang][repKey];
             const indicators = document.querySelectorAll('.dimension-dot');
-            indicators.forEach((dot, index) => {
-                if (index <= dimensionCount) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
+            indicators.forEach((dot, i) => dot.classList.toggle('active', i <= entity.dimensions));
         }
 
-        function updateStatus(message) {
-            const statusEl = document.getElementById('statusMessage');
-            statusEl.textContent = message;
-            statusEl.style.animation = 'none';
-            setTimeout(() => {
-                statusEl.style.animation = '';
-            }, 10);
+        function updateStatus(msg) {
+            document.getElementById('statusMessage').textContent = msg;
         }
 
-        // Initial draw
-        drawEntity();
-        updateUI();
+        setLanguage('ar');
     </script>
 </body>
 </html>
