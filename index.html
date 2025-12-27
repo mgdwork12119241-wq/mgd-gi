@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generative Spatial Intelligence - Interactive Research Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #a0a0a0;
+            font-weight: 300;
+        }
+
+        .research-badge {
+            display: inline-block;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px solid #7c3aed;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #7c3aed;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .panel:hover {
+            border-color: rgba(124, 58, 237, 0.6);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .panel h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #00d4ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel h2::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, #00d4ff, #7c3aed);
+            border-radius: 2px;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        button {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #7c3aed, #00d4ff);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+        }
+
+        .reset-btn:hover {
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+        }
+
+        .info-panel {
+            background: rgba(0, 212, 255, 0.05);
+            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-size: 0.9em;
+            color: #a0a0a0;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.3em;
+            color: #00d4ff;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .dimension-indicator {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .dimension-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(124, 58, 237, 0.3);
+            border: 1px solid rgba(124, 58, 237, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .dimension-dot.active {
+            background: #7c3aed;
+            box-shadow: 0 0 10px #7c3aed;
+        }
+
+        .observations {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .observations h3 {
+            color: #7c3aed;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .observation-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .observation-item:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .footer {
+            text-align: center;
+            color: #606060;
+            font-size: 0.9em;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(124, 58, 237, 0.2);
+        }
+
+        .status-message {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 4px solid #22c55e;
+            color: #86efac;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌌 Generative Spatial Intelligence</h1>
+            <p class="subtitle">Interactive Research Dashboard for Dimensional Evolution</p>
+            <div class="research-badge">🔬 Active Exploratory Research Project</div>
+        </header>
+
+        <div class="main-content">
+            <!-- Canvas Panel -->
+            <div class="panel">
+                <h2>Spatial Visualization</h2>
+                <canvas id="canvas"></canvas>
+                <div class="controls">
+                    <button onclick="evolveEntity()">➕ Add Dimension</button>
+                    <button onclick="resetEntity()" class="reset-btn">🔄 Reset</button>
+                </div>
+                <div class="status-message" id="statusMessage">
+                    Ready to evolve. Click "Add Dimension" to begin.
+                </div>
+            </div>
+
+            <!-- Information Panel -->
+            <div class="panel">
+                <h2>Entity State</h2>
+                
+                <div class="info-panel">
+                    <div class="info-label">Current Dimensions</div>
+                    <div class="info-value" id="dimensionCount">0D</div>
+                </div>
+
+                <div class="info-panel">
+                    <div class="info-label">Representation</div>
+                    <div class="info-value" id="representation">Conceptual Point</div>
+                </div>
+
+                <div class="info-panel">
+                    <div class="info-label">Evolution State</div>
+                    <div class="dimension-indicator" id="dimensionIndicator">
+                        <div class="dimension-dot active"></div>
+                        <div class="dimension-dot"></div>
+                        <div class="dimension-dot"></div>
+                        <div class="dimension-dot"></div>
+                    </div>
+                </div>
+
+                <div class="observations">
+                    <h3>📊 Research Observations</h3>
+                    <div class="observation-item">
+                        Early dimensional transitions are predictable and stable.
+                    </div>
+                    <div class="observation-item">
+                        Simple evolution logic produces emergent spatial structures.
+                    </div>
+                    <div class="observation-item">
+                        Mapping abstract intent to spatial rules remains non-trivial.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>mgd-gi: Model-Guided Dimensional Generator - General Intelligence</p>
+            <p>Independent research exploring generative intelligence and spatial reasoning paradigms.</p>
+        </footer>
+    </div>
+
+    <script type="module">
+        import { SpatialEntity } from './SpatialEntity.js';
+
+        // Initialize the spatial entity
+        const entity = new SpatialEntity();
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Visualization function
+        function drawEntity() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            ctx.save();
+
+            switch (entity.dimensions) {
+                case 0:
+                    // 0D - Point
+                    ctx.fillStyle = '#00d4ff';
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#00d4ff';
+                    ctx.font = 'bold 14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('0D: Conceptual Point', centerX, centerY + 40);
+                    break;
+
+                case 1:
+                    // 1D - Line
+                    ctx.strokeStyle = '#7c3aed';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(centerX - 80, centerY);
+                    ctx.lineTo(centerX + 80, centerY);
+                    ctx.stroke();
+                    
+                    // Draw arrows
+                    ctx.fillStyle = '#7c3aed';
+                    ctx.beginPath();
+                    ctx.moveTo(centerX + 80, centerY);
+                    ctx.lineTo(centerX + 70, centerY - 8);
+                    ctx.lineTo(centerX + 70, centerY + 8);
+                    ctx.fill();
+
+                    ctx.fillStyle = '#7c3aed';
+                    ctx.font = 'bold 14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('1D: Direction / Relation', centerX, centerY + 40);
+                    break;
+
+                case 2:
+                    // 2D - Rectangle/Plane
+                    ctx.fillStyle = 'rgba(0, 212, 255, 0.3)';
+                    ctx.strokeStyle = '#00d4ff';
+                    ctx.lineWidth = 2;
+                    ctx.fillRect(centerX - 100, centerY - 80, 200, 160);
+                    ctx.strokeRect(centerX - 100, centerY - 80, 200, 160);
+
+                    ctx.fillStyle = '#00d4ff';
+                    ctx.font = 'bold 14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('2D: Surface / Interaction', centerX, centerY + 100);
+                    break;
+
+                case 3:
+                    // 3D - Cube (isometric projection)
+                    drawIsometricCube(centerX, centerY, 80);
+                    ctx.fillStyle = '#7c3aed';
+                    ctx.font = 'bold 14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('3D: Volume / Environment', centerX, centerY + 120);
+                    break;
+
+                default:
+                    // Higher dimensions - Abstract representation
+                    ctx.fillStyle = 'rgba(124, 58, 237, 0.2)';
+                    ctx.strokeStyle = '#7c3aed';
+                    ctx.lineWidth = 2;
+                    for (let i = 0; i < 5; i++) {
+                        const radius = 50 + i * 20;
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+
+                    ctx.fillStyle = '#7c3aed';
+                    ctx.font = 'bold 14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`${entity.dimensions}D: Hyperspace Entity`, centerX, centerY + 130);
+            }
+
+            ctx.restore();
+        }
+
+        function drawIsometricCube(x, y, size) {
+            const iso = {
+                x: x,
+                y: y - size / 2,
+            };
+
+            // Define cube points in isometric projection
+            const points = [
+                [iso.x - size, iso.y, '#00d4ff'],
+                [iso.x + size, iso.y, '#00d4ff'],
+                [iso.x + size * 2, iso.y + size, '#7c3aed'],
+                [iso.x, iso.y + size * 2, '#7c3aed'],
+                [iso.x - size, iso.y + size, '#00d4ff'],
+                [iso.x, iso.y, '#00d4ff'],
+            ];
+
+            // Draw edges
+            ctx.strokeStyle = '#7c3aed';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(points[0][0], points[0][1]);
+            for (let i = 1; i < points.length; i++) {
+                ctx.lineTo(points[i][0], points[i][1]);
+            }
+            ctx.closePath();
+            ctx.stroke();
+
+            // Fill with gradient
+            const gradient = ctx.createLinearGradient(iso.x - size, iso.y, iso.x + size * 2, iso.y + size * 2);
+            gradient.addColorStop(0, 'rgba(124, 58, 237, 0.4)');
+            gradient.addColorStop(1, 'rgba(0, 212, 255, 0.4)');
+            ctx.fillStyle = gradient;
+            ctx.fill();
+        }
+
+        // Global functions for buttons
+        window.evolveEntity = function() {
+            if (entity.dimensions < 5) {
+                entity.evolve();
+                updateUI();
+                drawEntity();
+                updateStatus(`Entity evolved to ${entity.dimensions}D`);
+            } else {
+                updateStatus('Maximum dimensions reached (5D)');
+            }
+        };
+
+        window.resetEntity = function() {
+            entity.dimensions = 0;
+            updateUI();
+            drawEntity();
+            updateStatus('Entity reset to initial state');
+        };
+
+        function updateUI() {
+            const dimensionCount = entity.dimensions;
+            document.getElementById('dimensionCount').textContent = `${dimensionCount}D`;
+            document.getElementById('representation').textContent = entity.getRepresentation();
+
+            // Update dimension indicators
+            const indicators = document.querySelectorAll('.dimension-dot');
+            indicators.forEach((dot, index) => {
+                if (index <= dimensionCount) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function updateStatus(message) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.style.animation = 'none';
+            setTimeout(() => {
+                statusEl.style.animation = '';
+            }, 10);
+        }
+
+        // Initial draw
+        drawEntity();
+        updateUI();
+    </script>
+</body>
+</html>

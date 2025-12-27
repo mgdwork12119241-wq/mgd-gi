@@ -42,14 +42,18 @@ Each dimensional transition represents an increase in semantic and structural co
 ---
 
 ## Current Implementation
-The initial prototype is implemented in JavaScript:
+The project features a **Functional Research Prototype** that visualizes dimensional evolution:
 
-- `SpatialEntity.js`
-  - Encodes dimensional state
-  - Handles transitions between dimensions
-  - Provides a minimal simulation loop
+- **Interactive Dashboard** (`index.html`)
+  - Real-time visualization of spatial growth.
+  - Interactive controls for dimensional transitions.
+  - Research observation logging.
+- **Core Logic** (`SpatialEntity.js`)
+  - Encodes dimensional state.
+  - Handles transitions between dimensions.
+  - Provides the underlying mathematical model for evolution.
 
-Dimensional evolution is currently rule-based and deterministic, serving as a controlled environment for experimentation.
+Dimensional evolution is currently rule-based and deterministic, serving as a controlled environment for experimentation. You can run the simulation by opening `index.html` in any modern browser.
 
 ---
 
