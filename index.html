@@ -1,495 +1,294 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="htmlTag">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generative Spatial Intelligence - Interactive Research Dashboard</title>
+    <title>Manus Spatial Intelligence - Research Interface</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg-color: #050505;
+            --manus-purple: #7c3aed;
+            --manus-blue: #00d4ff;
+            --text-main: #e0e0e0;
+            --chat-bg: rgba(255, 255, 255, 0.05);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
-            color: #e0e0e0;
-            min-height: 100vh;
-            padding: 20px;
-            transition: direction 0.3s ease;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        .lang-switcher {
-            position: absolute;
-            top: 0;
-            left: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
             display: flex;
+            flex-direction: column;
+        }
+
+        /* Thought Space (Canvas) */
+        #thought-space {
+            flex: 1;
+            width: 100%;
+            background: radial-gradient(circle at center, #111 0%, #050505 100%);
+            cursor: crosshair;
+        }
+
+        /* Chat Interface */
+        #chat-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        #chat-messages {
+            max-height: 300px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
             gap: 10px;
+            padding: 10px;
+            scrollbar-width: none;
         }
+        #chat-messages::-webkit-scrollbar { display: none; }
 
-        [dir="ltr"] .lang-switcher {
-            left: auto;
-            right: 0;
-        }
-
-        .lang-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(124, 58, 237, 0.5);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 0.85em;
-            transition: all 0.3s ease;
-            min-width: auto;
-            box-shadow: none;
-        }
-
-        .lang-btn.active {
-            background: #7c3aed;
-            border-color: #7c3aed;
-        }
-
-        h1 {
-            font-size: 2.5em;
-            background: linear-gradient(135deg, #00d4ff, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-size: 1.1em;
-            color: #a0a0a0;
-            font-weight: 300;
-        }
-
-        .research-badge {
-            display: inline-block;
-            background: rgba(124, 58, 237, 0.2);
-            border: 1px solid #7c3aed;
-            padding: 8px 16px;
+        .bubble {
+            max-width: 80%;
+            padding: 12px 18px;
             border-radius: 20px;
-            margin-top: 15px;
-            font-size: 0.9em;
-            color: #7c3aed;
+            font-size: 0.95em;
+            line-height: 1.5;
+            animation: slideUp 0.3s ease-out;
         }
 
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .panel {
-            background: rgba(255, 255, 255, 0.05);
+        .manus-bubble {
+            align-self: flex-start;
+            background: var(--chat-bg);
             border: 1px solid rgba(124, 58, 237, 0.3);
-            border-radius: 12px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
-        }
-
-        .panel h2 {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            color: #00d4ff;
+            color: #fff;
+            border-bottom-right-radius: 4px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .panel h2::before {
-            content: '';
-            width: 4px;
+        .manus-bubble::before {
+            content: 'M';
+            background: linear-gradient(135deg, var(--manus-purple), var(--manus-blue));
+            width: 24px;
             height: 24px;
-            background: linear-gradient(180deg, #00d4ff, #7c3aed);
-            border-radius: 2px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            font-weight: bold;
         }
 
-        #canvas {
-            width: 100%;
-            height: 400px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            display: block;
-            margin-bottom: 20px;
+        .user-bubble {
+            align-self: flex-end;
+            background: var(--manus-purple);
+            color: white;
+            border-bottom-left-radius: 4px;
         }
 
-        .controls {
+        /* Input Area */
+        .input-area {
             display: flex;
             gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 8px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
 
-        button {
+        input {
             flex: 1;
-            min-width: 120px;
-            padding: 12px 20px;
-            background: linear-gradient(135deg, #7c3aed, #00d4ff);
+            background: transparent;
             border: none;
             color: white;
-            border-radius: 8px;
-            cursor: pointer;
+            padding: 10px 20px;
+            outline: none;
             font-size: 1em;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
-        }
-
-        .reset-btn {
-            background: linear-gradient(135deg, #ef4444, #f97316);
-        }
-
-        .info-panel {
-            background: rgba(0, 212, 255, 0.05);
-            border-left: 4px solid #00d4ff;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }
-
-        [dir="rtl"] .info-panel {
-            border-left: none;
-            border-right: 4px solid #00d4ff;
-        }
-
-        .info-label {
-            font-size: 0.9em;
-            color: #a0a0a0;
-            margin-bottom: 5px;
-        }
-
-        .info-value {
-            font-size: 1.3em;
-            color: #00d4ff;
-            font-weight: 600;
-            font-family: 'Courier New', monospace;
-        }
-
-        .dimension-indicator {
-            display: flex;
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .dimension-dot {
-            width: 12px;
-            height: 12px;
+        .send-btn {
+            background: var(--manus-purple);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: rgba(124, 58, 237, 0.3);
-            border: 1px solid rgba(124, 58, 237, 0.5);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
         }
 
-        .dimension-dot.active {
-            background: #7c3aed;
-            box-shadow: 0 0 10px #7c3aed;
+        .send-btn:hover { transform: scale(1.1); }
+
+        /* UI Elements */
+        .header-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-align: right;
+            pointer-events: none;
         }
 
-        .observations {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(124, 58, 237, 0.2);
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
+        .header-info h1 { font-size: 1.2em; color: var(--manus-blue); margin-bottom: 5px; }
+        .header-info p { font-size: 0.8em; color: #666; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .observations h3 {
-            color: #7c3aed;
-            margin-bottom: 12px;
-            font-size: 1.1em;
-        }
-
-        .observation-item {
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(124, 58, 237, 0.1);
-            font-size: 0.95em;
-            line-height: 1.6;
-        }
-
-        .status-message {
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 0.95em;
-            background: rgba(34, 197, 94, 0.1);
-            border-left: 4px solid #22c55e;
-            color: #86efac;
-        }
-
-        [dir="rtl"] .status-message {
-            border-left: none;
-            border-right: 4px solid #22c55e;
-        }
-
-        @media (max-width: 1024px) {
-            .main-content { grid-template-columns: 1fr; }
-            .lang-switcher { position: static; justify-content: center; margin-bottom: 20px; }
-        }
+        /* RTL Support */
+        [dir="ltr"] .manus-bubble { align-self: flex-start; border-bottom-right-radius: 20px; border-bottom-left-radius: 4px; }
+        [dir="ltr"] .user-bubble { align-self: flex-end; border-bottom-left-radius: 20px; border-bottom-right-radius: 4px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="lang-switcher">
-                <button class="lang-btn active" onclick="setLanguage('ar')">العربية</button>
-                <button class="lang-btn" onclick="setLanguage('en')">English</button>
-            </div>
-            <h1 id="title">🌌 الذكاء المكاني التوليدي</h1>
-            <p class="subtitle" id="subtitle">لوحة أبحاث تفاعلية لتطور الأبعاد</p>
-            <div class="research-badge" id="badge">🔬 مشروع بحثي استكشافي نشط</div>
-        </header>
+    <canvas id="thought-space"></canvas>
 
-        <div class="main-content">
-            <div class="panel">
-                <h2 id="vizTitle">التصور المكاني</h2>
-                <canvas id="canvas"></canvas>
-                <div class="controls">
-                    <button onclick="evolveEntity()" id="evolveBtn">➕ إضافة بُعد</button>
-                    <button onclick="resetEntity()" class="reset-btn" id="resetBtn">🔄 إعادة ضبط</button>
-                </div>
-                <div class="status-message" id="statusMessage">جاهز للتطور. اضغط على "إضافة بُعد" للبدء.</div>
-            </div>
+    <div class="header-info">
+        <h1>Generative Spatial Intelligence</h1>
+        <p id="status-text">Research Mode: Active</p>
+    </div>
 
-            <div class="panel">
-                <h2 id="stateTitle">حالة الكيان</h2>
-                <div class="info-panel">
-                    <div class="info-label" id="dimLabel">الأبعاد الحالية</div>
-                    <div class="info-value" id="dimensionCount">0D</div>
-                </div>
-                <div class="info-panel">
-                    <div class="info-label" id="repLabel">التمثيل</div>
-                    <div class="info-value" id="representation">نقطة مفاهيمية</div>
-                </div>
-                <div class="info-panel">
-                    <div class="info-label" id="evolveLabel">حالة التطور</div>
-                    <div class="dimension-indicator" id="dimensionIndicator">
-                        <div class="dimension-dot active"></div>
-                        <div class="dimension-dot"></div>
-                        <div class="dimension-dot"></div>
-                        <div class="dimension-dot"></div>
-                    </div>
-                </div>
-                <div class="observations">
-                    <h3 id="obsTitle">📊 ملاحظات بحثية</h3>
-                    <div id="obsList">
-                        <div class="observation-item">انتقالات الأبعاد المبكرة مستقرة ويمكن التنبؤ بها.</div>
-                        <div class="observation-item">منطق التطور البسيط ينتج هياكل مكانية ناشئة.</div>
-                        <div class="observation-item">ربط القصد المجرد بالقواعد المكانية يظل تحدياً بحثياً.</div>
-                    </div>
-                </div>
-            </div>
+    <div id="chat-container">
+        <div id="chat-messages">
+            <div class="bubble manus-bubble">مرحباً! أنا Manus. كيف يمكنني مساعدتك في استكشاف الأبعاد اليوم؟</div>
         </div>
-
-        <footer class="footer" style="text-align: center; color: #606060; font-size: 0.9em; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(124, 58, 237, 0.2);">
-            <p id="footer1">mgd-gi: مولد الأبعاد الموجه بالنماذج - ذكاء عام</p>
-            <p id="footer2">بحث مستقل يستكشف نماذج الذكاء التوليدي والاستدلال المكاني.</p>
-        </footer>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="اكتب أمراً (مثلاً: أضف بعداً جديداً)..." onkeypress="handleKeyPress(event)">
+            <button class="send-btn" onclick="sendMessage()">➔</button>
+        </div>
     </div>
 
     <script type="module">
         import { SpatialEntity } from './SpatialEntity.js';
 
         const entity = new SpatialEntity();
-        const canvas = document.getElementById('canvas');
+        const canvas = document.getElementById('thought-space');
         const ctx = canvas.getContext('2d');
-        let currentLang = 'ar';
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
 
-        const translations = {
-            ar: {
-                title: "🌌 الذكاء المكاني التوليدي",
-                subtitle: "لوحة أبحاث تفاعلية لتطور الأبعاد",
-                badge: "🔬 مشروع بحثي استكشافي نشط",
-                vizTitle: "التصور المكاني",
-                evolveBtn: "➕ إضافة بُعد",
-                resetBtn: "🔄 إعادة ضبط",
-                statusReady: "جاهز للتطور. اضغط على \"إضافة بُعد\" للبدء.",
-                statusEvolved: "تطور الكيان إلى ",
-                statusMax: "تم الوصول لأقصى أبعاد (5D)",
-                statusReset: "تمت إعادة الكيان للحالة الأولية",
-                stateTitle: "حالة الكيان",
-                dimLabel: "الأبعاد الحالية",
-                repLabel: "التمثيل",
-                evolveLabel: "حالة التطور",
-                obsTitle: "📊 ملاحظات بحثية",
-                obs1: "انتقالات الأبعاد المبكرة مستقرة ويمكن التنبؤ بها.",
-                obs2: "منطق التطور البسيط ينتج هياكل مكانية ناشئة.",
-                obs3: "ربط القصد المجرد بالقواعد المكانية يظل تحدياً بحثياً.",
-                footer1: "mgd-gi: مولد الأبعاد الموجه بالنماذج - ذكاء عام",
-                footer2: "بحث مستقل يستكشف نماذج الذكاء التوليدي والاستدلال المكاني.",
-                rep0: "نقطة مفاهيمية (0D)",
-                rep1: "خط / علاقة (1D)",
-                rep2: "سطح / تفاعل (2D)",
-                rep3: "حجم / بيئة (3D)",
-                rep4: "كيان فائق (4D)"
-            },
-            en: {
-                title: "🌌 Generative Spatial Intelligence",
-                subtitle: "Interactive Research Dashboard for Dimensional Evolution",
-                badge: "🔬 Active Exploratory Research Project",
-                vizTitle: "Spatial Visualization",
-                evolveBtn: "➕ Add Dimension",
-                resetBtn: "🔄 Reset",
-                statusReady: "Ready to evolve. Click \"Add Dimension\" to begin.",
-                statusEvolved: "Entity evolved to ",
-                statusMax: "Maximum dimensions reached (5D)",
-                statusReset: "Entity reset to initial state",
-                stateTitle: "Entity State",
-                dimLabel: "Current Dimensions",
-                repLabel: "Representation",
-                evolveLabel: "Evolution State",
-                obsTitle: "📊 Research Observations",
-                obs1: "Early dimensional transitions are predictable and stable.",
-                obs2: "Simple evolution logic produces emergent spatial structures.",
-                obs3: "Mapping abstract intent to spatial rules remains non-trivial.",
-                footer1: "mgd-gi: Model-Guided Dimensional Generator - General Intelligence",
-                footer2: "Independent research exploring generative intelligence and spatial reasoning paradigms.",
-                rep0: "Conceptual Point (0D)",
-                rep1: "Line / Relation (1D)",
-                rep2: "Surface / Interaction (2D)",
-                rep3: "Volume / Environment (3D)",
-                rep4: "Hyperspace Entity (4D)"
+        let particles = [];
+        let connections = [];
+
+        class Particle {
+            constructor(x, y, label) {
+                this.x = x || Math.random() * canvas.width;
+                this.y = y || Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = 4;
+                this.label = label;
+                this.alpha = 0;
             }
-        };
 
-        window.setLanguage = function(lang) {
-            currentLang = lang;
-            const html = document.getElementById('htmlTag');
-            html.lang = lang;
-            html.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                if (this.alpha < 1) this.alpha += 0.02;
+            }
 
-            // Update UI text
-            document.getElementById('title').textContent = translations[lang].title;
-            document.getElementById('subtitle').textContent = translations[lang].subtitle;
-            document.getElementById('badge').textContent = translations[lang].badge;
-            document.getElementById('vizTitle').textContent = translations[lang].vizTitle;
-            document.getElementById('evolveBtn').textContent = translations[lang].evolveBtn;
-            document.getElementById('resetBtn').textContent = translations[lang].resetBtn;
-            document.getElementById('stateTitle').textContent = translations[lang].stateTitle;
-            document.getElementById('dimLabel').textContent = translations[lang].dimLabel;
-            document.getElementById('repLabel').textContent = translations[lang].repLabel;
-            document.getElementById('evolveLabel').textContent = translations[lang].evolveLabel;
-            document.getElementById('obsTitle').textContent = translations[lang].obsTitle;
-            document.getElementById('footer1').textContent = translations[lang].footer1;
-            document.getElementById('footer2').textContent = translations[lang].footer2;
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 212, 255, ${this.alpha})`;
+                ctx.fill();
+                
+                ctx.font = '10px Inter';
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha * 0.5})`;
+                ctx.fillText(this.label, this.x + 10, this.y + 5);
+            }
+        }
 
-            const obsItems = document.querySelectorAll('.observation-item');
-            obsItems[0].textContent = translations[lang].obs1;
-            obsItems[1].textContent = translations[lang].obs2;
-            obsItems[2].textContent = translations[lang].obs3;
+        function initSpace() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [new Particle(canvas.width/2, canvas.height/2, "Seed Intent (0D)")];
+        }
 
-            // Update active button
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent.toLowerCase().includes(lang === 'ar' ? 'عربي' : 'eng'));
+        function animate() {
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw connections
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(124, 58, 237, 0.15)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                }
+            }
+            ctx.stroke();
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
             });
 
-            updateUI();
-            drawEntity();
+            requestAnimationFrame(animate);
+        }
+
+        window.sendMessage = function() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            addBubble(text, 'user');
+            userInput.value = '';
+
+            // Simple Logic for Manus Response
+            setTimeout(() => {
+                if (text.includes('بعد') || text.includes('dimension')) {
+                    entity.evolve();
+                    const rep = entity.getRepresentation();
+                    addBubble(`تم تطوير الكيان. الحالة الحالية: ${rep}`, 'manus');
+                    
+                    // Add new particle to space
+                    particles.push(new Particle(null, null, rep));
+                } else if (text.includes('مسح') || text.includes('reset')) {
+                    entity.dimensions = 0;
+                    particles = [new Particle(canvas.width/2, canvas.height/2, "Seed Intent (0D)")];
+                    addBubble("تمت إعادة ضبط الفضاء المكاني.", 'manus');
+                } else {
+                    addBubble("أنا أراقب تطور الأبعاد في هذا الفضاء. اطلب مني 'إضافة بعد' لترى كيف تتشكل العلاقات.", 'manus');
+                }
+            }, 600);
         };
 
-        function resizeCanvas() {
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
-            drawEntity();
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        function drawEntity() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            ctx.save();
-
-            switch (entity.dimensions) {
-                case 0:
-                    ctx.fillStyle = '#00d4ff';
-                    ctx.beginPath(); ctx.arc(centerX, centerY, 8, 0, Math.PI * 2); ctx.fill();
-                    break;
-                case 1:
-                    ctx.strokeStyle = '#7c3aed'; ctx.lineWidth = 3;
-                    ctx.beginPath(); ctx.moveTo(centerX - 80, centerY); ctx.lineTo(centerX + 80, centerY); ctx.stroke();
-                    break;
-                case 2:
-                    ctx.fillStyle = 'rgba(0, 212, 255, 0.3)'; ctx.strokeStyle = '#00d4ff'; ctx.lineWidth = 2;
-                    ctx.fillRect(centerX - 100, centerY - 80, 200, 160); ctx.strokeRect(centerX - 100, centerY - 80, 200, 160);
-                    break;
-                case 3:
-                    drawIsometricCube(centerX, centerY, 80);
-                    break;
-                default:
-                    ctx.strokeStyle = '#7c3aed'; ctx.lineWidth = 2;
-                    for (let i = 0; i < 5; i++) {
-                        ctx.beginPath(); ctx.arc(centerX, centerY, 50 + i * 20, 0, Math.PI * 2); ctx.stroke();
-                    }
-            }
-            ctx.restore();
-        }
-
-        function drawIsometricCube(x, y, size) {
-            const isoY = y - size / 2;
-            ctx.strokeStyle = '#7c3aed'; ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(x - size, isoY); ctx.lineTo(x + size, isoY);
-            ctx.lineTo(x + size * 2, isoY + size); ctx.lineTo(x, isoY + size * 2);
-            ctx.lineTo(x - size, isoY + size); ctx.closePath(); ctx.stroke();
-            const grad = ctx.createLinearGradient(x - size, isoY, x + size * 2, isoY + size * 2);
-            grad.addColorStop(0, 'rgba(124, 58, 237, 0.4)'); grad.addColorStop(1, 'rgba(0, 212, 255, 0.4)');
-            ctx.fillStyle = grad; ctx.fill();
-        }
-
-        window.evolveEntity = function() {
-            if (entity.dimensions < 5) {
-                entity.evolve();
-                updateUI();
-                drawEntity();
-                updateStatus(translations[currentLang].statusEvolved + entity.dimensions + "D");
-            } else {
-                updateStatus(translations[currentLang].statusMax);
-            }
+        window.handleKeyPress = function(e) {
+            if (e.key === 'Enter') sendMessage();
         };
 
-        window.resetEntity = function() {
-            entity.dimensions = 0;
-            updateUI();
-            drawEntity();
-            updateStatus(translations[currentLang].statusReset);
-        };
-
-        function updateUI() {
-            document.getElementById('dimensionCount').textContent = `${entity.dimensions}D`;
-            const repKey = `rep${Math.min(entity.dimensions, 4)}`;
-            document.getElementById('representation').textContent = translations[currentLang][repKey];
-            const indicators = document.querySelectorAll('.dimension-dot');
-            indicators.forEach((dot, i) => dot.classList.toggle('active', i <= entity.dimensions));
+        function addBubble(text, sender) {
+            const div = document.createElement('div');
+            div.className = `bubble ${sender}-bubble`;
+            div.textContent = text;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        function updateStatus(msg) {
-            document.getElementById('statusMessage').textContent = msg;
-        }
-
-        setLanguage('ar');
+        window.addEventListener('resize', initSpace);
+        initSpace();
+        animate();
     </script>
 </body>
 </html>
