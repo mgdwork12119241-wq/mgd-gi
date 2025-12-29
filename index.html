@@ -1,306 +1,143 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manus Spatial Intelligence - Immersive Research Space</title>
+    <title>mgd-gi | Spatial Knowledge Engine</title>
     <style>
-        :root {
-            --bg-color: #020205;
-            --manus-purple: #7c3aed;
-            --manus-blue: #00d4ff;
-            --text-main: #e0e0e0;
-            --panel-bg: rgba(255, 255, 255, 0.03);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #thought-space {
-            flex: 1;
+        body, html {
+            margin: 0;
+            padding: 0;
             width: 100%;
-            background: radial-gradient(circle at center, #0a0a15 0%, #020205 100%);
-            cursor: grab;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-        #thought-space:active { cursor: grabbing; }
-
-        /* UI Controls */
-        .ui-overlay {
+        canvas {
+            display: block;
+            cursor: crosshair;
+        }
+        #ui-layer {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            display: flex;
-            justify-content: space-between;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
-            z-index: 1000;
+            z-index: 10;
         }
-
-        .ui-panel {
-            background: var(--panel-bg);
-            backdrop-filter: blur(15px);
+        .panel {
+            position: absolute;
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 15px 20px;
             border-radius: 12px;
+            padding: 20px;
             pointer-events: auto;
         }
-
-        .partnership-badge {
-            font-size: 0.85em;
-            color: var(--manus-blue);
-            border-left: 3px solid var(--manus-purple);
-            padding-left: 10px;
-            margin-bottom: 5px;
-        }
-
-        .focus-toggle {
-            background: var(--manus-purple);
-            border: none;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.8em;
-            transition: all 0.3s;
-        }
-        .focus-toggle:hover { transform: scale(1.05); background: var(--manus-blue); }
-
-        /* Chat Container */
-        #chat-container {
-            position: absolute;
-            bottom: 30px;
+        #top-bar {
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 90%;
-            max-width: 700px;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 100;
-        }
-
-        #chat-container.hidden {
-            transform: translateX(-50%) translateY(150%);
-            opacity: 0;
-        }
-
-        #chat-messages {
-            max-height: 200px;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            scrollbar-width: none;
-        }
-
-        .bubble {
-            max-width: 85%;
-            padding: 10px 15px;
-            border-radius: 18px;
-            font-size: 0.9em;
-            margin-bottom: 8px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .manus-bubble { background: rgba(124, 58, 237, 0.1); border: 1px solid rgba(124, 58, 237, 0.2); align-self: flex-start; }
-        .user-bubble { background: var(--manus-purple); align-self: flex-end; margin-left: auto; }
-
-        .input-area {
             display: flex;
-            background: rgba(255, 255, 255, 0.07);
-            border-radius: 30px;
-            padding: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 10px;
+            align-items: center;
         }
-
-        input {
-            flex: 1;
-            background: transparent;
-            border: none;
+        input[type="text"] {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 10px 20px;
+            padding: 8px 15px;
+            border-radius: 6px;
+            width: 300px;
             outline: none;
         }
-
-        /* Interaction Info */
-        .interaction-hint {
+        button {
+            background: #00ffcc;
+            color: #000;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        #status {
             position: absolute;
             bottom: 20px;
-            right: 20px;
-            font-size: 0.75em;
-            color: #555;
-            pointer-events: none;
+            left: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
         }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <canvas id="thought-space"></canvas>
-
-    <div class="ui-overlay">
-        <div class="ui-panel">
-            <div class="partnership-badge">شراكة بحثية: إنسان + Manus AI</div>
-            <h1 style="font-size: 1.1em; color: #fff;">Generative Spatial Intelligence</h1>
+    <canvas id="spatial-canvas"></canvas>
+    
+    <div id="ui-layer">
+        <div id="top-bar" class="panel">
+            <input type="text" id="url-input" placeholder="Paste URL or type concept...">
+            <button id="add-btn">Add to Space</button>
         </div>
-        <div class="ui-panel" style="display: flex; gap: 10px; align-items: center;">
-            <button class="focus-toggle" onclick="toggleFocus()" id="focusBtn">وضع التركيز (إخفاء الدردشة)</button>
-        </div>
-    </div>
-
-    <div id="chat-container">
-        <div id="chat-messages">
-            <div class="bubble manus-bubble">مرحباً بك في الفضاء البحثي المشترك. هذا العمل هو ثمرة تعاون بين ذكاء بشري مستقل وذكاء اصطناعي. كيف نطور الفضاء اليوم؟</div>
-        </div>
-        <div class="input-area">
-            <input type="text" id="user-input" placeholder="اطلب إضافة بعد، صورة، أو رابط..." onkeypress="if(event.key==='Enter') sendMessage()">
-            <button onclick="sendMessage()" style="background:none; border:none; color:var(--manus-blue); padding:0 15px; cursor:pointer; font-size:1.2em;">➔</button>
-        </div>
-    </div>
-
-    <div class="interaction-hint">
-        اسحب للتحريك • استخدم العجلة للتكبير • انقر على العقد للتفاعل
+        <div id="status">mgd-gi v2.0 | Spatial Knowledge Engine | Pan to move, Scroll to zoom</div>
     </div>
 
     <script type="module">
-        import { SpatialEntity } from './SpatialEntity.js';
+        import { SpatialCamera } from './engine/SpatialCamera.js';
+        import { RenderEngine } from './engine/RenderEngine.js';
+        import { InputHandler } from './engine/InputHandler.js';
+        import { ContentEmbedder } from './engine/ContentEmbedder.js';
+        import { ConceptNode, WebScreen, VideoScreen } from './entities/EntityTypes.js';
 
-        const entity = new SpatialEntity();
-        const canvas = document.getElementById('thought-space');
-        const ctx = canvas.getContext('2d');
+        const canvas = document.getElementById('spatial-canvas');
         
-        let nodes = [];
-        let offset = { x: 0, y: 0 };
-        let scale = 1;
-        let isDragging = false;
-        let lastMouse = { x: 0, y: 0 };
-
-        class Node {
-            constructor(x, y, data) {
-                this.x = x;
-                this.y = y;
-                this.data = data; // { type: 'text'|'image'|'link', content: '', label: '' }
-                this.radius = 5;
-                this.pulse = 0;
-            }
-
-            draw() {
-                const screenX = this.x * scale + offset.x;
-                const screenY = this.y * scale + offset.y;
-
-                // Pulse effect
-                this.pulse += 0.05;
-                const pSize = this.radius + Math.sin(this.pulse) * 2;
-
-                ctx.beginPath();
-                ctx.arc(screenX, screenY, pSize, 0, Math.PI * 2);
-                ctx.fillStyle = this.data.type === 'link' ? '#00d4ff' : '#7c3aed';
-                ctx.fill();
-
-                ctx.font = `${12 * scale}px Inter`;
-                ctx.fillStyle = 'rgba(255,255,255,0.7)';
-                ctx.fillText(this.data.label, screenX + 15, screenY + 5);
-
-                if (this.data.type === 'image') {
-                    ctx.strokeStyle = 'rgba(0, 212, 255, 0.3)';
-                    ctx.strokeRect(screenX - 20, screenY - 20, 40, 40);
-                }
-            }
-        }
-
-        function init() {
+        function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            offset.x = canvas.width / 2;
-            offset.y = canvas.height / 2;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const camera = new SpatialCamera();
+        const entities = [];
+        const engine = new RenderEngine(canvas, camera);
+        engine.setEntities(entities);
+        const input = new InputHandler(canvas, camera, entities);
+
+        // Initial entities
+        entities.push(new ConceptNode('root', 0, 0, 'Spatial Knowledge'));
+        entities.push(new ConceptNode('c1', 300, -200, 'Research'));
+        entities.push(new ConceptNode('c2', -300, 200, 'Development'));
+
+        engine.start();
+
+        // UI Logic
+        const urlInput = document.getElementById('url-input');
+        const addBtn = document.getElementById('add-btn');
+
+        addBtn.onclick = () => {
+            const val = urlInput.value.trim();
+            if (!val) return;
+
+            const worldPos = camera.screenToWorld(canvas.width/2, canvas.height/2, canvas.width, canvas.height);
             
-            nodes.push(new Node(0, 0, { type: 'text', label: 'نقطة البداية (0D)', content: 'النية الأولى' }));
-        }
-
-        function animate() {
-            ctx.fillStyle = '#020205';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Draw connections
-            ctx.beginPath();
-            ctx.strokeStyle = 'rgba(124, 58, 237, 0.1)';
-            for (let i = 0; i < nodes.length; i++) {
-                for (let j = i + 1; j < nodes.length; j++) {
-                    ctx.moveTo(nodes[i].x * scale + offset.x, nodes[i].y * scale + offset.y);
-                    ctx.lineTo(nodes[j].x * scale + offset.x, nodes[j].y * scale + offset.y);
-                }
-            }
-            ctx.stroke();
-
-            nodes.forEach(node => node.draw());
-            requestAnimationFrame(animate);
-        }
-
-        // Interaction Logic
-        canvas.onmousedown = (e) => { isDragging = true; lastMouse = { x: e.clientX, y: e.clientY }; };
-        window.onmouseup = () => isDragging = false;
-        window.onmousemove = (e) => {
-            if (isDragging) {
-                offset.x += e.clientX - lastMouse.x;
-                offset.y += e.clientY - lastMouse.y;
-                lastMouse = { x: e.clientX, y: e.clientY };
-            }
-        };
-        canvas.onwheel = (e) => {
-            const zoom = e.deltaY > 0 ? 0.9 : 1.1;
-            scale *= zoom;
-            e.preventDefault();
-        };
-
-        window.toggleFocus = function() {
-            const chat = document.getElementById('chat-container');
-            const btn = document.getElementById('focusBtn');
-            chat.classList.toggle('hidden');
-            btn.textContent = chat.classList.contains('hidden') ? 'إظهار الدردشة' : 'وضع التركيز (إخفاء الدردشة)';
-        };
-
-        window.sendMessage = function() {
-            const input = document.getElementById('user-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            addBubble(text, 'user');
-            input.value = '';
-
-            setTimeout(() => {
-                if (text.includes('بعد') || text.includes('dimension')) {
-                    entity.evolve();
-                    const rep = entity.getRepresentation();
-                    nodes.push(new Node((Math.random()-0.5)*400, (Math.random()-0.5)*400, { type: 'text', label: rep }));
-                    addBubble(`تم توسيع الفضاء: ${rep}`, 'manus');
-                } else if (text.includes('رابط') || text.includes('link')) {
-                    nodes.push(new Node((Math.random()-0.5)*400, (Math.random()-0.5)*400, { type: 'link', label: 'OpenAI Research', content: 'https://openai.com/research' }));
-                    addBubble("تمت إضافة عقدة مرجعية (رابط بحثي) إلى الفضاء.", 'manus');
-                } else if (text.includes('صورة') || text.includes('image')) {
-                    nodes.push(new Node((Math.random()-0.5)*400, (Math.random()-0.5)*400, { type: 'image', label: 'Spatial Concept Map' }));
-                    addBubble("تم دمج عنصر بصري في نسيج الأفكار.", 'manus');
+            if (val.startsWith('http')) {
+                const info = ContentEmbedder.parseUrl(val);
+                if (info.type === 'video') {
+                    entities.push(new VideoScreen(null, worldPos.x, worldPos.y, info.id, info.provider));
                 } else {
-                    addBubble("أنا معك في هذا البحث. يمكننا إضافة أبعاد، روابط، أو وسائط لتوسيع هذا الفضاء المكاني.", 'manus');
+                    entities.push(new WebScreen(null, worldPos.x, worldPos.y, val));
                 }
-            }, 600);
+            } else {
+                entities.push(new ConceptNode(null, worldPos.x, worldPos.y, val));
+            }
+            urlInput.value = '';
         };
-
-        function addBubble(text, sender) {
-            const container = document.getElementById('chat-messages');
-            const div = document.createElement('div');
-            div.className = `bubble ${sender}-bubble`;
-            div.textContent = text;
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        init();
-        animate();
     </script>
 </body>
 </html>

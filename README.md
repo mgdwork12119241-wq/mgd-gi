@@ -1,103 +1,40 @@
-# Generative Spatial Intelligence (mgd-gi)
+# mgd-gi | Spatial Knowledge Engine v2.0
 
-## Abstract
-This project explores a novel paradigm for human–AI interaction, where **human intent is translated into evolving spatial structures** rather than textual answers.  
-Instead of treating AI as a question–answer system, this work investigates how intent can drive **dimensional growth** (0D → 1D → 2D → 3D) inside a generative spatial simulation.
+> "Knowledge is not a list, it's a space. Thought is not a sequence, it's navigation."
 
-The goal is to study whether spatial generation can serve as a more natural interface for reasoning, creativity, and cognition.
+**mgd-gi** is an experimental research project exploring the boundaries of spatial intelligence and knowledge representation. It transforms the traditional web interface into a boundless, zoomable canvas where information exists as spatial entities.
 
----
+## 🌌 Vision
+This project is built on the philosophy that human cognition is inherently spatial. By mapping concepts, media, and web content into a 2D/3D space, we enable a more intuitive way to explore complex relationships and research topics.
 
-## Research Question
-Can an AI system translate abstract human intent into structured, evolving spatial entities instead of static textual outputs?
+## 🚀 Features
+- **Infinite Spatial Canvas**: Smooth pan and zoom navigation (Google Earth style).
+- **Modular Architecture**: Clean separation between the engine, entities, and knowledge layers.
+- **Multi-Entity Support**:
+  - **Concept Nodes**: Abstract ideas and labels.
+  - **Web Screens**: Embedded live websites via iframes.
+  - **Video Screens**: Integrated YouTube/Vimeo players.
+  - **Image Nodes**: Visual assets.
+- **Intelligent Embedding**: Automatic URL parsing and content detection.
+- **Vanilla Tech Stack**: Built with pure HTML5, CSS3, and JavaScript for maximum performance and zero dependencies.
 
----
+## 🛠 Architecture
+- `/engine`: Core systems (Camera, RenderEngine, InputHandler).
+- `/entities`: Spatial object definitions and behaviors.
+- `/knowledge`: Data structures for storing and linking information.
+- `/utils`: Helper functions and math utilities.
 
-## Hypothesis
-If user intent is mapped to dimensional transformation rules, then an AI-driven system can generate spatial representations that better reflect human conceptual thinking than traditional text-based interaction.
+## 📖 Research Philosophy
+This project explores:
+1. **Knowledge as Space**: How distance and proximity affect our understanding of information.
+2. **Thought as Navigation**: Moving through ideas instead of clicking through pages.
+3. **Links as Distances**: The strength of a relationship represented by spatial coordinates.
 
----
-
-## Conceptual Motivation
-Most current AI systems operate through linear text exchange.  
-Human cognition, however, often works spatially:
-- ideas form structures
-- concepts occupy relative positions
-- understanding emerges through navigation, not answers
-
-This project treats **space as the primary output**, and **intent as the input signal**.
-
----
-
-## System Overview
-The core abstraction is a `SpatialEntity` that evolves through dimensions:
-
-- **0D** — point / intention seed  
-- **1D** — direction / relation  
-- **2D** — surface / interaction  
-- **3D** — volume / environment  
-
-Each dimensional transition represents an increase in semantic and structural complexity.
+## 🛠 Development
+To run the project locally:
+1. Clone the repository.
+2. Open `index.html` in any modern browser.
+3. Use a local server (like `npx serve`) for full iframe support.
 
 ---
-
-## Current Implementation
-The project features a **Functional Research Prototype** that visualizes dimensional evolution:
-
-- **Interactive Dashboard** (`index.html`)
-  - Real-time visualization of spatial growth.
-  - Interactive controls for dimensional transitions.
-  - Research observation logging.
-- **Core Logic** (`SpatialEntity.js`)
-  - Encodes dimensional state.
-  - Handles transitions between dimensions.
-  - Provides the underlying mathematical model for evolution.
-
-Dimensional evolution is currently rule-based and deterministic, serving as a controlled environment for experimentation. You can run the simulation by opening `index.html` in any modern browser.
-
----
-
-## Observations
-- Dimensional transitions remain stable when constrained by explicit rules.
-- Even simple evolution logic produces emergent spatial structures.
-- Mapping abstract intent to spatial rules is non-trivial and highlights the need for better intent representations.
-
----
-
-## Limitations
-- No learning mechanism yet (pure simulation).
-- No natural language → intent mapping.
-- No evaluation metric for “meaningfulness” of generated space.
-
-These limitations are intentional to isolate conceptual behavior before introducing learning dynamics.
-
----
-
-## Next Research Steps
-Planned extensions include:
-- Mapping natural language instructions to spatial transformations
-- Introducing probabilistic or learned transition rules
-- Studying how humans interpret generated spatial structures
-- Exploring whether spatial outputs improve reasoning or creativity tasks
-
----
-
-## Why This Matters
-This project is about **rethinking the interface between intelligence and humans**, not about graphics or visualization.  
-If AI systems are to collaborate meaningfully with human cognition, they may need to generate **structures**, not just sentences.
-
----
-
-## Research Partnership
-This project is a unique **collaborative research effort between an independent (non-academic) researcher and Artificial Intelligence (Manus AI)**. 
-
-It represents a new model of knowledge production where human intuition and conceptual vision are augmented by AI's generative and structural capabilities. This partnership aims to challenge traditional academic boundaries and explore the potential of "Human-AI Co-Intelligence" in spatial reasoning.
-
-### Authors
-- **Independent Researcher**: Lead visionary and conceptual architect.
-- **Manus AI**: Autonomous research agent and technical implementation partner.
-
----
-
-## Status
-Active exploratory research project.
+*A research collaboration between Human Intelligence and Manus AI.*
