@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mgd-gi | Spatial Knowledge Engine</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        canvas {
+            display: block;
+            cursor: crosshair;
+        }
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .panel {
+            position: absolute;
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            pointer-events: auto;
+        }
+        #top-bar {
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+        #toolbar {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            padding: 10px 25px;
+        }
+        .tool-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .tool-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .tool-btn.active {
+            background: #00ffcc;
+            color: #000;
+        }
+        input[type="text"] {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            width: 300px;
+            outline: none;
+        }
+        button {
+            background: #00ffcc;
+            color: #000;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        #status {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="spatial-canvas"></canvas>
+    
+    <div id="ui-layer">
+        <div id="top-bar" class="panel">
+            <input type="text" id="url-input" placeholder="Paste URL or type concept...">
+            <button id="add-btn">Add to Space</button>
+        </div>
+        
+        <div id="toolbar" class="panel">
+            <button class="tool-btn" id="tool-select">🖱️ Select</button>
+            <button class="tool-btn" id="tool-move">🖐️ Pan</button>
+            <button class="tool-btn" id="tool-reset">🏠 Reset View</button>
+            <div style="width: 1px; background: rgba(255,255,255,0.2); margin: 0 5px;"></div>
+            <button class="tool-btn" id="tool-grid">🌐 Toggle Grid</button>
+        </div>
+
+        <div id="status">mgd-gi v2.1 | Spatial Knowledge Engine | Drag to move, Scroll to zoom, Corner to resize</div>
+    </div>
+
+    <script type="module">
+        import { SpatialCamera } from './engine/SpatialCamera.js';
+        import { RenderEngine } from './engine/RenderEngine.js';
+        import { InputHandler } from './engine/InputHandler.js';
+        import { ContentEmbedder } from './engine/ContentEmbedder.js';
+        import { ConceptNode, WebScreen, VideoScreen } from './entities/EntityTypes.js';
+
+        const canvas = document.getElementById('spatial-canvas');
+        
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const camera = new SpatialCamera();
+        const entities = [];
+        const engine = new RenderEngine(canvas, camera);
+        engine.setEntities(entities);
+        const input = new InputHandler(canvas, camera, entities);
+
+        // Initial entities
+        entities.push(new ConceptNode('root', 0, 0, 'Spatial Knowledge'));
+        entities.push(new ConceptNode('c1', 300, -200, 'Research'));
+        entities.push(new ConceptNode('c2', -300, 200, 'Development'));
+
+        engine.start();
+
+        // UI Logic
+        const urlInput = document.getElementById('url-input');
+        const addBtn = document.getElementById('add-btn');
+
+        addBtn.onclick = () => {
+            const val = urlInput.value.trim();
+            if (!val) return;
+
+            const worldPos = camera.screenToWorld(canvas.width/2, canvas.height/2, canvas.width, canvas.height);
+            
+            if (val.startsWith('http')) {
+                const info = ContentEmbedder.parseUrl(val);
+                if (info.type === 'video') {
+                    entities.push(new VideoScreen(null, worldPos.x, worldPos.y, info.id, info.provider));
+                } else {
+                    entities.push(new WebScreen(null, worldPos.x, worldPos.y, val));
+                }
+            } else {
+                entities.push(new ConceptNode(null, worldPos.x, worldPos.y, val));
+            }
+            urlInput.value = '';
+        };
+
+        // Toolbar Logic
+        document.getElementById('tool-reset').onclick = () => {
+            camera.targetX = 0;
+            camera.targetY = 0;
+            camera.targetZoom = 1.0;
+        };
+
+        document.getElementById('tool-grid').onclick = () => {
+            engine.showGrid = !engine.showGrid;
+        };
+    </script>
+</body>
+</html>
