@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="محرك المعرفة المكاني - تطبيق ذكاء اصطناعي لتحويل الأفكار إلى كائنات مكانية تفاعلية">
     <title>محرك المعرفة المكاني | Spatial Knowledge Engine</title>
     <style>
         * {
@@ -12,448 +13,608 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-            color: #ecedee;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            padding: 40px 20px;
-            margin-bottom: 40px;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #0a7ea4, #00ffcc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            font-size: 1.3rem;
-            color: #9ba1a6;
-            margin-bottom: 20px;
-        }
-
-        .hero {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 60px;
-            align-items: center;
-        }
-
-        .hero-text h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #00ffcc;
-        }
-
-        .hero-text p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #b0b5ba;
-            margin-bottom: 15px;
-        }
-
-        .hero-text ul {
-            margin-right: 20px;
-            color: #b0b5ba;
-            line-height: 2;
-        }
-
-        .hero-visual {
-            background: rgba(10, 126, 164, 0.1);
-            border: 2px solid #0a7ea4;
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .canvas-demo {
-            width: 100%;
-            height: 300px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            border: 2px dashed #0a7ea4;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            color: #9ba1a6;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .demo-node {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            cursor: grab;
-            transition: transform 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
-        }
-
-        .demo-node:hover {
-            transform: scale(1.1);
-        }
-
-        .concept { background: #0a7ea4; }
-        .website { background: #22c55e; }
-        .video { background: #f59e0b; }
-        .image { background: #8b5cf6; }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-
-        .feature-card {
-            background: rgba(30, 32, 34, 0.8);
-            border: 1px solid #334155;
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s;
-        }
-
-        .feature-card:hover {
-            border-color: #0a7ea4;
-            background: rgba(10, 126, 164, 0.1);
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-
-        .feature-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-            color: #00ffcc;
-        }
-
-        .feature-card p {
-            color: #9ba1a6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f8f9fa;
+            color: #202124;
             line-height: 1.6;
         }
 
-        .cta-section {
-            background: linear-gradient(135deg, rgba(10, 126, 164, 0.2), rgba(0, 255, 204, 0.1));
-            border: 2px solid #0a7ea4;
-            border-radius: 20px;
-            padding: 50px;
+        /* Header */
+        header {
+            background: white;
+            padding: 16px 20px;
+            border-bottom: 1px solid #dadce0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .logo span {
+            color: #4285f4;
+        }
+
+        nav a {
+            color: #5f6368;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #202124;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* Hero Section */
+        .hero {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
         }
 
-        .cta-section h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #00ffcc;
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            color: #202124;
+            letter-spacing: -1px;
         }
 
-        .cta-section p {
-            font-size: 1.1rem;
-            color: #b0b5ba;
-            margin-bottom: 30px;
+        .hero h1 span {
+            color: #4285f4;
         }
 
+        .hero p {
+            font-size: 20px;
+            color: #5f6368;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Search Box */
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            background: white;
+            border: 1px solid #dadce0;
+            border-radius: 24px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.08);
+            transition: box-shadow 0.2s;
+        }
+
+        .search-box:focus-within {
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+            border-color: #dadce0;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            background: transparent;
+            color: #202124;
+        }
+
+        .search-box input::placeholder {
+            color: #9aa0a6;
+        }
+
+        .search-icon {
+            color: #9aa0a6;
+            font-size: 20px;
+        }
+
+        /* Buttons */
         .button-group {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
+            margin-bottom: 60px;
             flex-wrap: wrap;
         }
 
         .btn {
-            padding: 15px 40px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 10px;
+            padding: 10px 24px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            background: #f8f9fa;
+            color: #3c4043;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            background: #f8f9fa;
+            border: 1px solid #dadce0;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #0a7ea4, #00ffcc);
-            color: #000;
+            background: #4285f4;
+            color: white;
+            border: 1px solid #4285f4;
         }
 
         .btn-primary:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+            background: #3367d6;
+            border: 1px solid #3367d6;
+            box-shadow: 0 1px 3px rgba(66, 133, 244, 0.3);
         }
 
-        .btn-secondary {
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 32px;
+            border-radius: 8px;
+            border: 1px solid #dadce0;
+            transition: all 0.2s;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #202124;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: #5f6368;
+            line-height: 1.6;
+        }
+
+        /* AI Generator Section */
+        .ai-generator {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #dadce0;
+            padding: 40px;
+            margin-bottom: 80px;
+            text-align: center;
+        }
+
+        .ai-generator h2 {
+            font-size: 32px;
+            font-weight: 400;
+            margin-bottom: 16px;
+            color: #202124;
+        }
+
+        .ai-generator p {
+            font-size: 16px;
+            color: #5f6368;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .generator-input {
+            max-width: 600px;
+            margin: 0 auto 24px;
+            background: #f8f9fa;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            padding: 12px 16px;
+            font-size: 14px;
+        }
+
+        .generator-input textarea {
+            width: 100%;
+            border: none;
             background: transparent;
-            border: 2px solid #0a7ea4;
-            color: #00ffcc;
+            outline: none;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 100px;
+            color: #202124;
         }
 
-        .btn-secondary:hover {
-            background: rgba(10, 126, 164, 0.2);
+        .generator-input textarea::placeholder {
+            color: #9aa0a6;
         }
 
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4285f4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .output {
+            display: none;
+            background: #f8f9fa;
+            border-radius: 4px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .output.active {
+            display: block;
+        }
+
+        .output h4 {
+            color: #4285f4;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .output-content {
+            background: white;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            padding: 16px;
+            color: #202124;
+            font-size: 14px;
+            line-height: 1.8;
+            text-align: right;
+        }
+
+        /* Comparison */
         .comparison {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #dadce0;
+            padding: 40px;
+            margin-bottom: 80px;
+        }
+
+        .comparison h2 {
+            font-size: 32px;
+            font-weight: 400;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #202124;
+        }
+
+        .comparison-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
-            margin-bottom: 60px;
         }
 
-        .comparison-box {
-            background: rgba(30, 32, 34, 0.8);
-            border: 2px solid #334155;
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
-        }
-
-        .comparison-box h3 {
-            font-size: 1.5rem;
+        .comparison-col h3 {
+            font-size: 18px;
+            font-weight: 500;
             margin-bottom: 20px;
-            color: #00ffcc;
+            color: #202124;
         }
 
-        .comparison-box ul {
+        .comparison-col ul {
             list-style: none;
         }
 
-        .comparison-box li {
-            padding: 10px 0;
-            color: #b0b5ba;
-            border-bottom: 1px solid #334155;
+        .comparison-col li {
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #5f6368;
         }
 
-        .comparison-box li:last-child {
+        .comparison-col li:last-child {
             border-bottom: none;
         }
 
-        .comparison-box li:before {
+        .comparison-col li:before {
             content: "✓ ";
-            color: #22c55e;
+            color: #4285f4;
             font-weight: bold;
-            margin-left: 10px;
+            margin-left: 8px;
         }
 
+        /* Footer */
         footer {
+            background: white;
+            border-top: 1px solid #dadce0;
+            padding: 20px;
             text-align: center;
-            padding: 40px 20px;
-            border-top: 1px solid #334155;
-            color: #9ba1a6;
+            color: #5f6368;
+            font-size: 14px;
         }
 
-        .grid-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(10, 126, 164, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(10, 126, 164, 0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: -1;
+        footer a {
+            color: #4285f4;
+            text-decoration: none;
+            margin: 0 12px;
         }
 
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            .hero {
-                grid-template-columns: 1fr;
-            }
-
-            .comparison {
-                grid-template-columns: 1fr;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+            .comparison-grid { grid-template-columns: 1fr; }
+            header { flex-direction: column; gap: 16px; }
+            nav { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+            nav a { margin: 0 8px; }
         }
     </style>
 </head>
 <body>
-    <div class="grid-background"></div>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            🌌 <span>mgd-gi</span>
+        </div>
+        <nav>
+            <a href="#features">المميزات</a>
+            <a href="#generator">المحاكي</a>
+            <a href="https://github.com/mgdwork12119241-wq/mgd-gi" target="_blank">GitHub</a>
+            <a href="canvas.html">التطبيق</a>
+        </nav>
+    </header>
 
+    <!-- Main Content -->
     <div class="container">
-        <header>
-            <h1>🌌 محرك المعرفة المكاني</h1>
-            <p class="subtitle">Spatial Knowledge Engine</p>
-            <p style="color: #9ba1a6; font-size: 1.1rem;">
-                تحويل الأفكار إلى كائنات مكانية تفاعلية، مثل AutoCAD لكن للمعرفة
-            </p>
-        </header>
-
+        <!-- Hero Section -->
         <section class="hero">
-            <div class="hero-text">
-                <h2>ما هي الفكرة؟</h2>
-                <p>
-                    بدل قراءة الأفكار في قوائم خطية، ضعها كـ <strong>كائنات</strong> في فضاء لا نهائي.
-                </p>
-                <p>
-                    حرّك الأفكار، كبّرها، صغّرها، وربطها ببعضها مثل AutoCAD تماماً.
-                </p>
-                <p>
-                    كل كائن يمكن أن يكون:
-                </p>
-                <ul>
-                    <li>💡 <strong>مفهوم</strong> - فكرة أو نص</li>
-                    <li>🌐 <strong>موقع ويب</strong> - رابط مضمّن</li>
-                    <li>▶️ <strong>فيديو</strong> - YouTube أو Vimeo</li>
-                    <li>🖼️ <strong>صورة</strong> - أصل بصري</li>
-                </ul>
+            <h1>محرك المعرفة <span>المكاني</span></h1>
+            <p>تطبيق ذكاء اصطناعي لتحويل الأفكار إلى كائنات مكانية تفاعلية</p>
+            
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="ابحث عن فكرة أو مفهوم...">
             </div>
-            <div class="hero-visual">
-                <h3 style="color: #00ffcc; margin-bottom: 20px;">تجربة تفاعلية</h3>
-                <div class="canvas-demo">
-                    <div class="demo-node concept" style="left: 20%; top: 20%;" title="مفهوم">💡</div>
-                    <div class="demo-node website" style="right: 20%; top: 30%;" title="موقع">🌐</div>
-                    <div class="demo-node video" style="left: 30%; bottom: 20%;" title="فيديو">▶️</div>
-                    <div class="demo-node image" style="right: 30%; bottom: 25%;" title="صورة">🖼️</div>
-                </div>
-                <p style="margin-top: 15px; color: #9ba1a6; font-size: 0.9rem;">
-                    اسحب الكائنات • كبّر وصغّر • اربط الأفكار
-                </p>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="document.getElementById('generator').scrollIntoView({behavior: 'smooth'})">
+                    🤖 جرّب محاكي AI
+                </button>
+                <button class="btn" onclick="window.location.href='canvas.html'">
+                    🚀 افتح التطبيق
+                </button>
+                <button class="btn" onclick="window.location.href='https://github.com/mgdwork12119241-wq/mgd-gi'" target="_blank">
+                    💻 الكود
+                </button>
             </div>
         </section>
 
-        <section class="features">
-            <div class="feature-card">
-                <div class="feature-icon">🎮</div>
-                <h3>تفاعل حدسي</h3>
-                <p>اسحب الكائنات، اقرص للتكبير، اضغط لتحديد - تماماً مثل AutoCAD</p>
-            </div>
+        <!-- Features Section -->
+        <section id="features" class="features">
             <div class="feature-card">
                 <div class="feature-icon">♾️</div>
                 <h3>فضاء لا نهائي</h3>
-                <p>لا حدود للحركة والتوسع - استكشف معرفتك بحرية</p>
+                <p>تحرك بحرية في فضاء مكاني لا محدود، اسحب وكبّر وصغّر الأفكار</p>
             </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>ذكاء اصطناعي</h3>
+                <p>محرك AI يحلل ويربط الأفكار تلقائياً ويقترح علاقات جديدة</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>محتوى متعدد</h3>
+                <p>ضع روابط، فيديوهات، صور، ومفاهيم في نفس الفضاء</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>على جميع الأجهزة</h3>
+                <p>ويب، iOS، Android مع دعم كامل للعربية والإنجليزية</p>
+            </div>
+
             <div class="feature-card">
                 <div class="feature-icon">🔗</div>
                 <h3>ربط ذكي</h3>
-                <p>ربط الأفكار ببعضها عبر المسافة المكانية</p>
+                <p>اربط الأفكار ببعضها عبر المسافة المكانية والعلاقات</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">🌍</div>
-                <h3>محتوى متعدد</h3>
-                <p>YouTube، مواقع، صور، نصوص - كل شيء في مكان واحد</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📱</div>
-                <h3>على الهاتف</h3>
-                <p>تطبيق أصيّ لـ iOS و Android مع دعم كامل للعربية</p>
-            </div>
+
             <div class="feature-card">
                 <div class="feature-icon">🎨</div>
-                <h3>تصميم احترافي</h3>
-                <p>واجهة Glassmorphism حديثة وسلسة</p>
+                <h3>تفاعل حدسي</h3>
+                <p>واجهة بسيطة وسهلة الاستخدام مثل الألعاب الحديثة</p>
             </div>
         </section>
 
+        <!-- AI Generator Section -->
+        <section id="generator" class="ai-generator">
+            <h2>🤖 محاكي التوليد الذكي</h2>
+            <p>أدخل فكرة أو موضوع، وسيقوم محرك الذكاء الاصطناعي بتحليلها وتوليد أفكار مرتبطة</p>
+            
+            <div class="generator-input">
+                <textarea id="input-text" placeholder="مثال: الذكاء الاصطناعي والتعليم..."></textarea>
+            </div>
+
+            <button class="btn btn-primary" onclick="generateIdeas()">
+                ✨ توليد أفكار
+            </button>
+
+            <div class="loading" id="loading">
+                <span class="spinner"></span>
+                <span>جاري التحليل والتوليد...</span>
+            </div>
+
+            <div class="output" id="output">
+                <h4>الأفكار المولدة:</h4>
+                <div class="output-content" id="output-content"></div>
+            </div>
+        </section>
+
+        <!-- Comparison Section -->
         <section class="comparison">
-            <div class="comparison-box">
-                <h3>📐 AutoCAD التقليدي</h3>
-                <ul>
-                    <li>رسم أشكال هندسية</li>
-                    <li>تصميم وهندسة</li>
-                    <li>للمهندسين والمصممين</li>
-                    <li>رسومات ثابتة</li>
-                    <li>معقد ومتخصص</li>
-                </ul>
-            </div>
-            <div class="comparison-box">
-                <h3>🧠 محرك المعرفة المكاني</h3>
-                <ul>
-                    <li>وضع كائنات معرفية</li>
-                    <li>تنظيم الأفكار والمعرفة</li>
-                    <li>للباحثين والطلاب والمفكرين</li>
-                    <li>محتوى ديناميكي تفاعلي</li>
-                    <li>بسيط وحدسي</li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="cta-section">
-            <h2>جرّب الآن</h2>
-            <p>استكشف الفضاء المعرفي وابدأ بناء معرفتك الخاصة</p>
-            <div class="button-group">
-                <button class="btn btn-primary" onclick="window.location.href='canvas.html'">
-                    🚀 افتح التطبيق
-                </button>
-                <button class="btn btn-secondary" onclick="window.location.href='https://github.com/mgdwork12119241-wq/mgd-gi'">
-                    💻 شاهد الكود
-                </button>
-                <button class="btn btn-secondary" onclick="window.location.href='mobile/MOBILE_README.md'">
-                    📱 التطبيق الجوال
-                </button>
+            <h2>المقارنة</h2>
+            <div class="comparison-grid">
+                <div class="comparison-col">
+                    <h3>📐 AutoCAD</h3>
+                    <ul>
+                        <li>رسم أشكال هندسية</li>
+                        <li>تصميم وهندسة</li>
+                        <li>للمهندسين</li>
+                        <li>معقد ومتخصص</li>
+                        <li>سوق محدود</li>
+                    </ul>
+                </div>
+                <div class="comparison-col">
+                    <h3>🧠 محرك المعرفة</h3>
+                    <ul>
+                        <li>وضع كائنات معرفية</li>
+                        <li>تنظيم الأفكار</li>
+                        <li>للباحثين والطلاب</li>
+                        <li>بسيط وحدسي</li>
+                        <li>سوق عالمي ضخم</li>
+                    </ul>
+                </div>
             </div>
         </section>
     </div>
 
+    <!-- Footer -->
     <footer>
-        <p>© 2025 محرك المعرفة المكاني | Spatial Knowledge Engine</p>
-        <p>مشروع بحثي مفتوح المصدر تحت ترخيص MIT</p>
-        <p>تم التطوير بواسطة Manus AI</p>
+        <p>
+            © 2025 محرك المعرفة المكاني | 
+            <a href="https://github.com/mgdwork12119241-wq/mgd-gi" target="_blank">GitHub</a> |
+            <a href="https://github.com/mgdwork12119241-wq/mgd-gi/blob/master/LICENSE" target="_blank">الترخيص</a> |
+            <a href="https://github.com/mgdwork12119241-wq/mgd-gi/blob/master/CONTRIBUTING.md" target="_blank">المساهمة</a>
+        </p>
     </footer>
 
     <script>
-        // تحريك الكائنات في التجربة التفاعلية
-        const nodes = document.querySelectorAll('.demo-node');
-        nodes.forEach(node => {
-            let isDragging = false;
-            let offsetX = 0;
-            let offsetY = 0;
+        // AI Generator Simulator
+        const ideas = {
+            'الذكاء الاصطناعي': [
+                '🤖 التعلم الآلي والشبكات العصبية',
+                '🧠 معالجة اللغة الطبيعية',
+                '👁️ رؤية الحاسوب والتعرف على الصور',
+                '🎮 الألعاب والذكاء الاصطناعي',
+                '🔮 المستقبل والتطبيقات المحتملة'
+            ],
+            'التعليم': [
+                '📚 التعليم الإلكتروني والتعلم عن بعد',
+                '👨‍🎓 تطوير المهارات والتدريب',
+                '🎯 التعليم الشخصي والتكيفي',
+                '📊 تقييم الأداء والإحصائيات',
+                '🌍 التعليم العالمي والشامل'
+            ],
+            'التكنولوجيا': [
+                '💻 الحوسبة السحابية',
+                '🔐 الأمان والخصوصية',
+                '⚡ الأداء والتحسين',
+                '🌐 الويب والتطبيقات',
+                '📱 الأجهزة المحمولة'
+            ],
+            'الميتافيرس': [
+                '🌌 الواقع الافتراضي والمعزز',
+                '🎮 العوالم الرقمية',
+                '👥 التفاعل الاجتماعي',
+                '💰 الاقتصاد الرقمي',
+                '🔮 المستقبل الرقمي'
+            ]
+        };
 
-            node.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                const rect = node.getBoundingClientRect();
-                const containerRect = node.parentElement.getBoundingClientRect();
-                offsetX = e.clientX - rect.left;
-                offsetY = e.clientY - rect.top;
-            });
+        function generateIdeas() {
+            const input = document.getElementById('input-text').value.trim();
+            
+            if (!input) {
+                alert('الرجاء إدخال فكرة أو موضوع');
+                return;
+            }
 
-            document.addEventListener('mousemove', (e) => {
-                if (isDragging) {
-                    const containerRect = node.parentElement.getBoundingClientRect();
-                    const x = e.clientX - containerRect.left - offsetX;
-                    const y = e.clientY - containerRect.top - offsetY;
-                    node.style.left = Math.max(0, Math.min(x, containerRect.width - node.offsetWidth)) + 'px';
-                    node.style.top = Math.max(0, Math.min(y, containerRect.height - node.offsetHeight)) + 'px';
+            const loading = document.getElementById('loading');
+            const output = document.getElementById('output');
+            const outputContent = document.getElementById('output-content');
+
+            // Show loading
+            loading.classList.add('active');
+            output.classList.remove('active');
+
+            // Simulate AI processing
+            setTimeout(() => {
+                let generatedIdeas = [];
+
+                // Search for related ideas
+                for (const [key, values] of Object.entries(ideas)) {
+                    if (input.includes(key) || key.includes(input)) {
+                        generatedIdeas = values;
+                        break;
+                    }
                 }
-            });
 
-            document.addEventListener('mouseup', () => {
-                isDragging = false;
-            });
+                // If no exact match, generate random ideas
+                if (generatedIdeas.length === 0) {
+                    const allIdeas = Object.values(ideas).flat();
+                    generatedIdeas = allIdeas.sort(() => 0.5 - Math.random()).slice(0, 5);
+                }
+
+                // Display results
+                outputContent.innerHTML = generatedIdeas
+                    .map((idea, index) => `<div style="margin: 12px 0; padding: 12px; background: #f8f9fa; border-radius: 4px; border-right: 3px solid #4285f4;">
+                        ${idea}
+                    </div>`)
+                    .join('');
+
+                loading.classList.remove('active');
+                output.classList.add('active');
+            }, 1500);
+        }
+
+        // Allow Enter key to generate
+        document.getElementById('input-text').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                generateIdeas();
+            }
         });
     </script>
 </body>
