@@ -1,89 +1,58 @@
-# mgd-gi | محرك المعرفة المكاني
+<p align="center">
+  <img src="./assets/logo.png" width="200" alt="Logospace Logo">
+</p>
+
+# 🌌 Logospace: The Post-Language Cognitive Architecture
 
 > "Knowledge is not a list, it's a space. Thought is not a sequence, it's navigation."
 > 
-> "المعرفة ليست قائمة، إنها مساحة. الفكر ليس تسلسلاً، إنه توجيه."
+> **"المعرفة ليست قائمة، إنها مساحة. الفكر ليس تسلسلاً، إنه توجيه."**
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Version](https://img.shields.io/badge/version-2.1.0-brightgreen.svg)
-![Status](https://img.shields.io/badge/status-Active-success.svg)
+![Status](https://img.shields.io/badge/status-Revolutionary-red.svg)
+![Paradigm Shift](https://img.shields.io/badge/paradigm-Shift-orange.svg)
 
-**mgd-gi** is an experimental research project exploring the boundaries of spatial intelligence and knowledge representation. It transforms the traditional web interface into a boundless, zoomable canvas where information exists as spatial entities.
+**Logospace** is the world's first **Generative Spatial Simulator** designed to explore the boundaries of human cognition and knowledge representation beyond linear language. It transforms the traditional web interface into a boundless, zoomable canvas where human intent and information exist as interactive, navigable spatial entities.
 
-## 📱 Available Versions
+## 🚀 The Revolution: Why Logospace?
 
-### 🌐 Web Version
-- **Tech**: HTML5, Canvas API, JavaScript
-- **Features**: Pan, Zoom, Grid, Content Embedding
-- **Try it**: [Live Demo](https://mgdwork12119241-wq.github.io/mgd-gi/)
+We are moving past the era of flat, linear information. Logospace introduces a **Post-Language Cognitive Architecture** where the relationship between ideas is defined by **spatial proximity and distance**, not by hyperlinks or hierarchical lists.
 
-### 📱 Mobile Version (NEW!)
-- **Tech**: React Native, Expo, TypeScript
-- **Features**: Spatial Canvas, YouTube/Vimeo, Full Arabic (RTL) Support
-- **Platforms**: iOS 13+, Android 8+
-- **Docs**: [Read mobile/MOBILE_README.md](./mobile/MOBILE_README.md)
+*   **Materialize Intent:** Use AI to instantly generate complex ideas and concepts into a 3D-like spatial environment.
+*   **Navigate Thought:** Move through your knowledge space with smooth pan, zoom, and rotation, making thinking a form of exploration.
+*   **Arabic First:** Full, native Right-to-Left (RTL) support, making it the premier tool for Arabic cognitive exploration.
 
-## 🚀 Features
+## 📱 Available Platforms
 
-- **Infinite Spatial Canvas**: Smooth pan, zoom, and rotation navigation.
-- **Dynamic Resizing**: Resize any spatial entity (Web, Video, Concept) directly in the space.
-- **Interactive Toolbar**: Quick access to selection, panning, and view resetting.
-- **Modular Architecture**: Clean separation between the engine, entities, and knowledge layers.
-- **Multi-Entity Support**:
-  - **Concept Nodes**: Abstract ideas and labels.
-  - **Web Screens**: Embedded live websites via iframes.
-  - **Video Screens**: Integrated YouTube/Vimeo players.
-  - **Image Nodes**: Visual assets.
-- **Intelligent Embedding**: Automatic URL parsing and content detection.
-- **Full Arabic Support**: Complete RTL support for Arabic users.
-- **Vanilla Tech Stack**: Built with pure HTML5, CSS3, and JavaScript for maximum performance.
+### 🌐 Web Version (Vanilla JS)
+*   **Tech**: HTML5, Canvas API, JavaScript (Pure Vanilla Stack for maximum performance).
+*   **Features**: Core spatial engine, interactive toolbar, dynamic entity resizing.
+*   **Try it**: [Live Demo (Coming Soon via GitHub Pages)](https://mgdwork12119241-wq.github.io/Logospace/)
 
-## 🛠 Architecture
+### 📱 Mobile Version (React Native)
+*   **Tech**: React Native, Expo, TypeScript, tRPC.
+*   **Features**: Seamless mobile gestures, integrated media players (YouTube/Vimeo), full RTL support.
+*   **Docs**: [Read mobile/MOBILE_README.md](./mobile/MOBILE_README.md)
 
-### Web Version
-- `/engine`: Core systems (Camera, RenderEngine, InputHandler).
-- `/entities`: Spatial object definitions and behaviors.
-- `/knowledge`: Data structures for storing and linking information.
-- `/utils`: Helper functions and math utilities.
+## 🛠 Architecture Highlights
 
-### Mobile Version
-- `/mobile/app`: React Native screens and navigation.
-- `/mobile/components`: Reusable UI components.
-- `/mobile/lib/spatial`: Spatial engine for mobile.
-- `/mobile/hooks`: Custom React hooks for state management.
+Logospace is built on a modular, high-performance architecture:
 
-## 📖 Research Philosophy
+*   `/engine`: The core spatial mathematics, camera, and rendering loop.
+*   `/entities`: Extensible system for defining new spatial objects (Concepts, Web Screens, Videos).
+*   `/mobile`: The full React Native application, leveraging the same core concepts.
 
-This project explores:
+## 🤝 Partnership & Acknowledgement
 
-1. **Knowledge as Space**: How distance and proximity affect our understanding of information.
-2. **Thought as Navigation**: Moving through ideas instead of clicking through pages.
-3. **Links as Distances**: The strength of a relationship represented by spatial coordinates.
-
-## 🛠 Development
-
-### Web Version
-1. Clone the repository.
-2. Open `index.html` in any modern browser.
-3. Use a local server (like `npx serve`) for full iframe support.
-
-### Mobile Version
-```bash
-cd mobile
-pnpm install
-pnpm dev:metro
-```
-
-## 🤝 Contributing
-
-We welcome contributions! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
+This project is the result of a deep dive into cognitive computing. The core architectural principles and initial guidance were provided by an independent AI research framework.
 
 ## 📜 License
 
-This project is licensed under the [MIT License](./LICENSE).
+This project is licensed under the highly permissive [MIT License](./LICENSE).
 
 ---
 
-*A research collaboration between Human Intelligence and Manus AI.*
+*A new era of knowledge begins here.*
 
-⭐ If you like this project, please give it a star!
+⭐ **If you believe in the Post-Language future, give us a star!**

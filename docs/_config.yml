@@ -1,0 +1,5 @@
+# GitHub Pages Configuration
+theme: jekyll-theme-slate
+title: Logospace - The Post-Language Cognitive Architecture
+description: The world's first Generative Spatial Simulator
+show_downloads: true
