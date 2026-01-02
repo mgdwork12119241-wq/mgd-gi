@@ -1,0 +1,19 @@
+{
+  "name": "Logospace AI",
+  "version": "3.0.0-alpha",
+  "description": "The Post-Language Cognitive Engine for GitHub",
+  "permissions": {
+    "contents": "read",
+    "metadata": "read",
+    "issues": "write"
+  },
+  "events": [
+    "push",
+    "pull_request"
+  ],
+  "features": {
+    "hyper_pattern_discovery": true,
+    "spatial_mapping": true,
+    "beyond_human_insights": true
+  }
+}
